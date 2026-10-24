@@ -1,6 +1,6 @@
 # TAPX Counsel
 
-A responsive implementation of the supplied ten-screen business profile design. Built with HTML, CSS and JavaScript, with no runtime dependencies or build step.
+A responsive business profile webpage based on the supplied design. Built with HTML, CSS and JavaScript, with no runtime dependencies or build step.
 
 ## Run locally
 
@@ -14,7 +14,7 @@ Open **http://localhost:5173**. You can also run the same command from the paren
 
 ## Included
 
-- The lawyer’s jacket card opens in 3D to reveal the digital profile. Select **Meet A. Perera** to enter.
+- The profile is the first page shown when the website loads. There is no opening card, welcome screen or button to enter. Old `#welcome` links open the profile directly as well.
 - Profile, Practice and Forum tabs support touch and mouse swipes. Drag any non-interactive part of a tab horizontally. Vertical scrolling stays native.
 - Contact details export as a `.vcf` file, ready to import into a contacts app.
 - Consultation forms validate contact details and the preferred date, retain edits while navigating, and prepare a downloadable request. An email draft option becomes available after configuring real contact details.
@@ -42,8 +42,8 @@ npm run check
 
 This checks all JavaScript files for syntax errors. Upload the contents of **`dist/`** to any static web host. Hash-based navigation needs no server rewrite rules. The included local server binds only to `127.0.0.1`.
 
-The build also passed 20 DOM interaction checks covering the jacket introduction, contact export, navigation, consultation validation and draft retention, request downloads, search, category filters, local posts and replies, HTML escaping, simulated horizontal swipes, and invalid-route recovery. These checks do not verify physical device performance or visual layout.
+DOM interaction checks cover direct profile loading, old welcome links, contact export, navigation, consultation validation and draft retention, request downloads, search, category filters, local posts and replies, HTML escaping, simulated horizontal swipes, and invalid-route recovery. These checks do not verify physical device performance or visual layout.
 
 The repository includes an automated GitHub Pages workflow at **`.github/workflows/deploy-pages.yml`**. It publishes only **`tapx-counsel/dist/`** after JavaScript checks pass. Set the repository's Pages publishing source to **GitHub Actions**. Future pushes to `main` trigger deployment automatically.
 
-Visual browser QA was unavailable in the build environment. Review the profile on a phone before release, particularly the opening animation and horizontal gestures.
+Visual browser QA was unavailable in the build environment. Review the profile on a phone before release, particularly the horizontal gestures.

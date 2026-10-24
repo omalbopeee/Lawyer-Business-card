@@ -1,6 +1,6 @@
 # TAPX Counsel business profile
 
-The application is in **`tapx-counsel/`**.
+The website is in **`tapx-counsel/`**. Opening the website immediately shows the business profile, without an introduction or an **Open profile** button.
 
 Run **`npm run dev`** from this workspace, then open **http://localhost:5173**.
 

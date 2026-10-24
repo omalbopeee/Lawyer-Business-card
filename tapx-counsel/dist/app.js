@@ -24,7 +24,7 @@ let community;
 try { community = JSON.parse(localStorage.getItem(storageKey) || 'null'); } catch { community = null; }
 if (!community || !Array.isArray(community.threads) || !community.replies || typeof community.replies !== 'object') community = { threads: [], replies: {} };
 community.threads = community.threads.filter(t => t && typeof t.id === 'string' && typeof t.title === 'string' && typeof t.body === 'string' && ['Practice', 'Procedure', 'Career'].includes(t.category));
-const state = { tab: 0, route: 'welcome', opened: false, opening: false, filter: 'All', search: '', meeting: 'Video call', selectedThread: null, request: null, consultationDraft: null, discussionDraft: null, replyDraft: null };
+const state = { tab: 0, route: 'profile', filter: 'All', search: '', meeting: 'Video call', selectedThread: null, request: null, consultationDraft: null, discussionDraft: null, replyDraft: null };
 let toastTimer;
 let drag = null;
 let suppressClickUntil = 0;
@@ -51,47 +51,11 @@ dialog.addEventListener('close', () => lastFocus?.focus?.({ preventScroll: true 
 dialog.addEventListener('click', event => {
   if (event.target === dialog) { const rect = dialog.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close(); }
 });
-function header(title, back = 'welcome', end = '') {
-  return `<header class="topbar"><button class="round-button" type="button" data-action="back" data-target="${back}" aria-label="Go back">${icon('back')}</button><div class="topbar-title">${title}</div><div class="topbar-end">${end}</div></header>`;
-}
-function jacket() {
-  return `<div class="jacket-wrap"><div class="jacket" id="jacket" aria-label="A black lawyer’s jacket card that opens to reveal A. Perera’s profile" role="img">
-    <div class="jacket-tab"></div><div class="jacket-inside"><div class="mini-avatar">${esc(profile.initials)}</div><h2>${esc(profile.name)}</h2><p>${esc(profile.title)}</p><div class="mini-save">Save contact</div><div class="mini-line"></div><div class="mini-line short"></div></div>
-    <div class="jacket-half left"><svg viewBox="0 0 150 405" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="jacket-left" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2a2b2f"/><stop offset="1" stop-color="#18191c"/></linearGradient></defs><path d="M22 1H150V404H22Q1 404 1 382V23Q1 1 22 1Z" fill="url(#jacket-left)" stroke="#46474e"/><path d="M45 28 142 63 96 171 64 103 20 49Z" fill="#333439"/><path d="m45 28 97 35-46 108" fill="none" stroke="#51525b"/><path d="m126 61 16 3-12 72-14-3Z" fill="#f9f9fa"/><path d="M1 312H150" stroke="#ffffff03"/><path d="M150 1V404" stroke="#62636a"/></svg></div>
-    <div class="jacket-half right"><svg viewBox="0 0 150 405" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="jacket-right" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#27282c"/><stop offset="1" stop-color="#17181b"/></linearGradient></defs><path d="M0 1H128Q149 1 149 23V382Q149 404 128 404H0Z" fill="url(#jacket-right)" stroke="#46474e"/><path d="m105 28-97 35 46 108 32-68 44-54Z" fill="#333439"/><path d="M105 28 8 63l46 108" fill="none" stroke="#51525b"/><path d="m24 61-16 3 12 72 14-3Z" fill="#f9f9fa"/><path d="M0 312H149" stroke="#ffffff03"/></svg></div>
-    <div class="jacket-name"><strong>${esc(profile.name)}</strong><span>${esc(profile.title)}</span></div>
-  </div></div>`;
-}
-function renderWelcome() {
-  app.classList.add('is-landing');
-  app.innerHTML = `<main class="landing"><a class="brand" href="#welcome" aria-label="Counsel home">${icon('scales')}<span>COUNSEL</span></a><div class="landing-grid"><div class="landing-copy"><h1 id="welcome-heading"><span>Your counsel.</span><span>One tap away.</span></h1><p class="landing-subtitle" id="welcome-subtitle">A personal introduction, thoughtfully presented.</p></div>${jacket()}<div class="landing-actions"><div class="opening-progress" id="opening-progress" hidden><span></span></div><button class="button button-dark" data-action="open-profile" id="open-profile">${icon('arrow')}<span>Open profile</span></button><p class="landing-credit">Digital profile by <a href="#" data-action="about">TAPX</a></p></div></div><p class="landing-hint">An introduction, at your own pace.</p></main>`;
-  if (state.opened) {
-    document.querySelector('#jacket').classList.add('is-open');
-    document.querySelector('#welcome-heading').innerHTML = '<span>An introduction</span><span>worth opening.</span>';
-    document.querySelector('#welcome-subtitle').textContent = 'Your digital counsel profile.';
-    document.querySelector('#open-profile span').textContent = `Meet ${profile.name}`;
-  }
-}
-function openProfile() {
-  if (state.opening) return;
-  if (state.opened) { navigate('profile'); return; }
-  state.opening = true;
-  const heading = document.querySelector('#welcome-heading');
-  heading.innerHTML = '<span>An introduction</span><span>worth opening.</span>';
-  if (!reducedMotion.matches) heading.animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 550, easing: 'cubic-bezier(.22,1,.36,1)' });
-  document.querySelector('#welcome-subtitle').textContent = 'Your digital counsel profile.';
-  document.querySelector('#jacket').classList.add('is-open');
-  const progress = document.querySelector('#opening-progress'); progress.hidden = false;
-  requestAnimationFrame(() => progress.classList.add('is-open'));
-  const trigger = document.querySelector('#open-profile'); trigger.disabled = true; trigger.querySelector('span').textContent = 'Opening your profile…';
-  setTimeout(() => {
-    state.opened = true; state.opening = false;
-    if (state.route !== 'welcome') return;
-    trigger.disabled = false; trigger.querySelector('span').textContent = `Meet ${profile.name}`;
-  }, reducedMotion.matches ? 0 : 1050);
+function header(title, back = 'profile', end = '') {
+  return `<header class="topbar">${back ? `<button class="round-button" type="button" data-action="back" data-target="${back}" aria-label="Go back">${icon('back')}</button>` : '<span aria-hidden="true"></span>'}<div class="topbar-title">${title}</div><div class="topbar-end">${end}</div></header>`;
 }
 function profileView() {
-  return `${header('Profile', 'welcome', `<button class="round-button" data-action="profile-options" aria-label="Profile options">${icon('more')}</button>`)}
+  return `${header('Profile', null, `<button class="round-button" data-action="profile-options" aria-label="Profile options">${icon('more')}</button>`)}
     <section class="card profile-hero" aria-labelledby="profile-name"><div class="avatar">${esc(profile.initials)}</div><h1 id="profile-name" tabindex="-1">${esc(profile.name)}</h1><p class="profile-title">${esc(profile.title)}</p><p class="location">${icon('pin')}${esc(profile.location)}</p><p class="availability">${esc(profile.availability)}</p></section>
     <div class="profile-save">${button('Save contact', 'save-contact', 'dark', 'save')}</div>
     <div class="contact-grid" aria-label="Contact options">${[['phone','Call','call'],['whatsapp','WhatsApp','whatsapp'],['mail','Email','email'],['globe','Website','website']].map(([glyph,label,action]) => `<button class="contact-action ${action}" data-action="contact" data-channel="${action}">${icon(glyph)}<span>${label}</span></button>`).join('')}</div>
@@ -113,7 +77,6 @@ function forumView() {
   return `${header('Community','profile',`<button class="member-badge" data-action="members">${icon('lock')}Members</button>`)}<h1 class="page-heading forum-heading" tabindex="-1">Legal Forum</h1><label class="search-field">${icon('search')}<input type="search" id="forum-search" placeholder="Search discussions" aria-label="Search discussions" value="${esc(state.search)}" autocomplete="off"></label><div class="segments forum-filters" aria-label="Discussion categories">${['All','Practice','Procedure','Career'].map(c=>`<button class="${state.filter === c ? 'active' : ''}" data-action="filter" data-filter="${c}" aria-pressed="${state.filter === c}">${c}</button>`).join('')}</div><div class="discussion-list" id="discussion-list" aria-live="polite">${forumCards()}</div><div class="forum-new">${button('New discussion','new-discussion','blue','plus')}</div><p class="local-note">Community preview · Your posts stay on this device.</p>`;
 }
 function renderMain() {
-  app.classList.remove('is-landing');
   app.innerHTML = `<div class="main-shell"><div class="tab-viewport"><div class="tab-track" style="--tab:${state.tab}">${[profileView(),practiceView(),forumView()].map((html,i)=>`<main class="tab-panel" data-panel="${i}" ${i !== state.tab ? 'inert' : ''}>${html}</main>`).join('')}</div></div><nav class="tabbar" aria-label="Main navigation" style="--tab:${state.tab}">${[['user','Profile'],['book','Practice'],['forum','Forum']].map(([glyph,label],i)=>`<button class="tab-button" data-action="tab" data-tab="${i}" ${state.tab === i ? 'aria-current="page"' : ''}>${icon(glyph)}<span>${label}</span></button>`).join('')}</nav></div>`;
 }
 function setTab(index, focus = true) {
@@ -172,10 +135,10 @@ function navigate(route, replace = false) {
 function renderRoute() {
   rememberDraft();
   let route;
-  try { route = decodeURIComponent(location.hash.slice(1) || 'welcome'); }
+  try { route = decodeURIComponent(location.hash.slice(1) || 'profile'); }
   catch { navigate('profile',true); return; }
   state.route = route;
-  if (route === 'welcome') { renderWelcome(); document.title = `${profile.name} · TAPX Counsel`; return; }
+  if (route === 'welcome') { navigate('profile', true); return; }
   if (tabs.includes(route)) {
     if (!document.querySelector('.main-shell')) { state.tab = tabs.indexOf(route); renderMain(); }
     closeDetail(); setTab(tabs.indexOf(route)); return;
@@ -262,8 +225,7 @@ document.addEventListener('click', event => {
   event.preventDefault();
   if (performance.now() < suppressClickUntil) return;
   const action = target.dataset.action;
-  if (action === 'open-profile') openProfile();
-  else if (action === 'back') navigate(target.dataset.target);
+  if (action === 'back') navigate(target.dataset.target);
   else if (action === 'tab') navigate(tabs[Number(target.dataset.tab)]);
   else if (['profile','practice','forum','consultation','new-discussion'].includes(action)) navigate(action);
   else if (action === 'thread' || action === 'reply') navigate(`${action === 'thread' ? 'discussion' : 'reply'}/${target.dataset.id}`);
