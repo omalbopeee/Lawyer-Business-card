@@ -13,11 +13,3 @@ The deployment workflow in `.github/workflows/deploy-pages.yml` checks the JavaS
 In the repository's **Settings → Pages**, the publishing source must be **GitHub Actions**.
 
 The profile uses relative asset URLs and hash-based navigation, so it works under the repository's GitHub Pages path without a build step.
-
-## GitHub Pages
-
-The deployment workflow in `.github/workflows/deploy-pages.yml` checks the JavaScript and publishes **`tapx-counsel/dist/`** whenever changes are pushed to `main`. It can also be started manually from GitHub Actions.
-
-In the repository's **Settings → Pages**, the publishing source must be **GitHub Actions**.
-
-The profile uses relative asset URLs and hash-based navigation, so it works under the repository's GitHub Pages path without a build step.
