@@ -30,6 +30,32 @@ let drag = null;
 let suppressClickUntil = 0;
 let lastFocus = null;
 
+function startCapeReveal() {
+  const cape = document.querySelector('#cape-reveal');
+  if (!cape) return;
+  if (reducedMotion.matches || document.visibilityState === 'hidden') { cape.remove(); return; }
+
+  let fallback;
+  function finish() {
+    clearTimeout(fallback);
+    cape.remove();
+    document.removeEventListener('keydown', finish);
+    document.removeEventListener('visibilitychange', onVisibilityChange);
+    reducedMotion.removeEventListener('change', onMotionChange);
+  }
+  function onVisibilityChange() { if (document.visibilityState === 'hidden') finish(); }
+  function onMotionChange(event) { if (event.matches) finish(); }
+  cape.addEventListener('animationend', event => {
+    if (event.target === cape && event.animationName === 'cape-clear') finish();
+  });
+  // Clicking the cape skips the reveal; the click never reaches the profile.
+  cape.addEventListener('click', event => { event.stopPropagation(); finish(); }, { once: true });
+  document.addEventListener('keydown', finish, { once: true });
+  document.addEventListener('visibilitychange', onVisibilityChange);
+  reducedMotion.addEventListener('change', onMotionChange);
+  fallback = setTimeout(finish, 2300);
+}
+
 function allThreads() {
   return [...community.threads, ...seedThreads].map(t => ({ ...t, replies: [...(t.replies || []), ...(Array.isArray(community.replies[t.id]) ? community.replies[t.id] : [])] }));
 }
@@ -333,3 +359,4 @@ document.addEventListener('keydown',event=>{
 window.addEventListener('hashchange',renderRoute);
 window.addEventListener('resize',()=>{ if(drag) finishSwipe(true); });
 renderRoute();
+startCapeReveal();

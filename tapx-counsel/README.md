@@ -14,7 +14,7 @@ Open **http://localhost:5173**. You can also run the same command from the paren
 
 ## Included
 
-- The profile is the first page shown when the website loads. There is no opening card, welcome screen or button to enter. Old `#welcome` links open the profile directly as well.
+- A black lawyer’s cape with white court tabs automatically parts like theatre curtains when the website loads, revealing the profile in about two seconds. There is no button to enter. Clicking the cape or pressing a key skips the reveal; reduced-motion preferences skip it automatically. The animation runs once per page load, and old `#welcome` links still open the profile directly.
 - Profile, Practice and Forum tabs support touch and mouse swipes. Drag any non-interactive part of a tab horizontally. Vertical scrolling stays native.
 - Contact details export as a `.vcf` file, ready to import into a contacts app.
 - Consultation forms validate contact details and the preferred date, retain edits while navigating, and prepare a downloadable request. An email draft option becomes available after configuring real contact details.
