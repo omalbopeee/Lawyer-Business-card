@@ -1,0 +1,9 @@
+{
+  "name": "tapx-counsel-workspace",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix tapx-counsel run dev",
+    "start": "npm --prefix tapx-counsel start",
+    "check": "npm --prefix tapx-counsel run check"
+  }
+}
