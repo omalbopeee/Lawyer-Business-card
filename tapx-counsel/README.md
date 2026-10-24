@@ -44,4 +44,6 @@ This checks all JavaScript files for syntax errors. Upload the contents of **`di
 
 The build also passed 20 DOM interaction checks covering the jacket introduction, contact export, navigation, consultation validation and draft retention, request downloads, search, category filters, local posts and replies, HTML escaping, simulated horizontal swipes, and invalid-route recovery. These checks do not verify physical device performance or visual layout.
 
-The private Sites registration service was unavailable during this build; no deployed URL was verified. Visual browser QA was also unavailable in the build environment. Review the profile on a phone before release, particularly the opening animation and horizontal gestures.
+The repository includes an automated GitHub Pages workflow at **`.github/workflows/deploy-pages.yml`**. It publishes only **`tapx-counsel/dist/`** after JavaScript checks pass. Set the repository's Pages publishing source to **GitHub Actions**. Future pushes to `main` trigger deployment automatically.
+
+Visual browser QA was unavailable in the build environment. Review the profile on a phone before release, particularly the opening animation and horizontal gestures.
